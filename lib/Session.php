@@ -1,8 +1,10 @@
 <?php
 class Session{
-
+	
 	public static function init(){
-		session_start();
+		if(session_status() === PHP_SESSION_NONE){
+			session_start();
+		}
 	}
 	public static function set($key, $value){
 		 $_SESSION[$key]=$value;
@@ -23,12 +25,13 @@ class Session{
 	public static function checkLogin(){
 		  self::init();
 		  if(self::get("adminLogin")==true){
-		  		header("Location: dashboard.php");
+		  		echo "<script>window.location='dashboard.php'</script>";
 		  }
 	}
 	public static function destroy(){
 		   session_destroy();
-		   header("Location: login.php");
+		   //header("Location: login.php");
+		   echo "<script>window.location='login.php'</script>";
 	}
 
 }

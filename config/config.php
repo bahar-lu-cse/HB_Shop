@@ -6,3 +6,4 @@ define('DB_NAME', "db_shop");
 
 
 
+?>

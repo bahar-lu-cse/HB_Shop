@@ -18,12 +18,15 @@
 ?>
 <?php
 	if($_SERVER['REQUEST_METHOD']=='POST' && isset($_POST['wishList'])){
-			$wishProdInsert=$pd->insertWishProduct($pdodID,$cusID);//$peodID is already taken.
+			$wishProdInsert=$pd->insertWishProduct($pdodID,$cusID); 
 	}
 ?>
 <style>
 	.mybutton{
 		width: 130px; float: left;
+	}
+	.ul li a{
+		text-decoration: none;
 	}
 </style>
  <div class="main">
@@ -41,16 +44,20 @@
 				<div class="desc span_3_of_2">
 					<h2><?php echo $result['productName']?></h2>
 					<div class="price">
-						<p>Price: <span>$<?php echo $result['price']?></span></p>
+						<p>Price: <span>৳<?php echo $result['price']?></span></p>
 						<p>Category: <span><?php echo $result['catName']?></span></p>
 						<p>Brand:<span><?php echo $result['brandName']?></span></p>
 					</div>
 					<div class="add-cart">
 						<form action="" method="post">
-							<input type="number" class="buyfield" name="quantity" value="1"/>
+							<input type="number" class="buyfield" name="quantity" min="1" value="1"/>
 							<input type="submit" class="buysubmit"  name="submit" value="Buy Now"/>
 						</form>				
 					</div>
+
+						
+
+
 					<?php
 						if(isset($addCart)){ ?>
 						<br/><span class="buysubmit" style='color: red; font-size: 18px; font-weight: bold;'>
@@ -98,7 +105,7 @@
 				<h2>CATEGORIES</h2>
 				<ul>
 				<?php
-					$getCatagory=$cat->catList();//$getCatagory=getAllCat();
+					$getCatagory=$cat->catList(); 
 					if($getCatagory){
 						while($result=$getCatagory->fetch_assoc()){ ?>
 			

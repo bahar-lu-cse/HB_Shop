@@ -7,7 +7,7 @@
 	class Cart{
 		private $db;
 		private $fm;
-		public function __construct(){  //object in constructor can be used within the whole class
+		public function __construct(){  
 			$this->db=new Database();
 			$this->fm=new Format();
 		}
@@ -35,10 +35,10 @@
 		    }else{
 				$query="INSERT into tbl_cart(sid,productID, productName, price, quantity, image) Values('$sid','$productid','$productName','$price','$quantity','$image')";
 				$cartInsert=$this->db->insert($query);
-				if($cartInsert !=false){
-					header("Location: cart.php");
+				if($cartInsert !=false){ 
+					echo "<script>window.location= 'cart.php';</script>";	 
 				}else{
-					header("Location: 404.php");
+		  			echo "<script>window.location= '404.php';</script>";
 				}
 			}
 		}
@@ -58,7 +58,7 @@
 			WHERE cartID='$cartID'";
 			$cartCheck=$this->db->update($query);
 			if($cartCheck){
-				header('location: cart.php');
+				echo "<script>window.location= 'cart.php';</script>";
 			}else{
 				$msg="<span class='error'>Cart Can not be Updated</span>";
 				return $msg;
@@ -87,23 +87,6 @@
 			$delCartProd=$this->db->delete($query);
 			return;
 		}
-		public function orderProduct($cusID){
-			$sid=session_id();
-			$query="SELECT * from tbl_cart where sid='$sid'";
-			$getProduct=$this->db->select($query);
-			if($getProduct){
-				while($result=$getProduct->fetch_assoc()){
-					$productID=$result['productID'];
-					$productName=$result['productName'];
-					$quantity=$result['quantity'];
-					$pr=$quantity*$result['price'];
-					$price=$pr+$pr*0.1; 
-					$image=$result['image'];
-					$query="INSERT into tbl_order(customerID,productID, productName, quantity, price,image) Values('$cusID','$productID','$productName','$quantity','$price','$image')";
-					$Insert=$this->db->insert($query); 
-				}
-			}
-		}//Order
 
 		public function payableAmount($cusID){
 			$query="SELECT price from tbl_order WHERE customerID='$cusID' && date=now()";
@@ -124,7 +107,7 @@
 			return $checkOrder;
 		}
 		public function getOrders(){
-			$query="SELECT * from tbl_order ORDER BY date DESC";
+			$query="SELECT * from tbl_order ORDER BY date ASC";
 			$getOrders=$this->db->select($query);
 			return $getOrders; 
 		}
@@ -153,7 +136,7 @@
 					WHERE orderID='$ID'";
 					$orderCancel=$this->db->update($query);
 			if($orderCancel){
-				$msg="<span class='success'>Order Cancelled</span>";
+				$msg="<span class='success'>Order Cancelled</span>";				
 				return $msg;
 			}else{
 				$msg="<span class='success'>Can not Cancel The Order</span>";
@@ -170,6 +153,14 @@
 					$orderShift=$this->db->update($query);
 			if($orderShift){
 				$msg="<span class='success'>Updated Successfully</span>";
+				$to= Session::get('cusEmail');
+				$sub ="Order Shipment";
+				$message= file_get_contents("../orderShiped.php");
+				
+				$headers= "From: baharlucse@gmail.com";
+				$headers .= "MIME-Version:Bahar-Shop" . "\r\n";
+				$headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
+				mail($to,$sub,$message,$headers);
 				return $msg;
 			}else{
 				$msg="<span class='success'>Not Updated</span>";
@@ -186,12 +177,53 @@
 					$productDelivered=$this->db->update($query);
 			if($productDelivered){
 				$msg="<span class='success'>Deleted Successfully</span>";
+
+				$to= Session::get('cusEmail');
+				$sub ="Order Delivered";
+				$message= file_get_contents("../orderDelivery.php");
+				
+				$headers= "From: baharlucse@gmail.com";
+				$headers .= "MIME-Version:Bahar-Shop" . "\r\n";
+				$headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
+				mail($to,$sub,$message,$headers);
+			
 				return $msg;
 			}else{
 				$msg="<span class='success'>Not Deleted</span>";
 				return $msg;
 			}
 		}
+		public function orderProduct($cusID){
+			$sid=session_id();
+			$query="SELECT * from tbl_cart where sid='$sid'";
+			$getProduct=$this->db->select($query);
+			if($getProduct){
+				while($result=$getProduct->fetch_assoc()){
+					$productID=$result['productID'];
+					$productName=$result['productName'];
+					$quantity=$result['quantity'];
+					$pr=$quantity*$result['price'];
+					$price=$pr+$pr*0.1; 
+					$image=$result['image'];
+					$query="INSERT into tbl_order(customerID,productID, productName, quantity, price,image) Values('$cusID','$productID','$productName','$quantity','$price','$image')";
+					$Insert=$this->db->insert($query); 
+				}
+				if($Insert){
+					$to= Session::get('cusEmail');
+					$sub ="Order Confirmation";
+					$message= file_get_contents("receipt.php");
+					
+					$headers= "From:baharlucse@gmail.com";
+					$headers .= "MIME-Version:Bahar-Shop" . "\r\n";
+					$headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
+					mail($to,$sub,$message,$headers);
+				}
+				else {
+					return "<span class='error'>Order Failed</span>";
+				}
+
+			}
+		}//Order
 		public function deleteOrder($ID){
 			$ID= mysqli_real_escape_string($this->db->link, $ID);
 			$query="DELETE from tbl_order WHERE orderID='$ID'";

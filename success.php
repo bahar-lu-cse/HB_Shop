@@ -16,7 +16,7 @@
  <style>
   .paymentsuccess{width: 500px; min-height: 200px; text-align: center; border: 1px solid #ddd; margin: 0 auto; padding: 50px;}
   .paymentsuccess h2{    border-bottom: 1px solid #ddd;margin-bottom: 20px; padding-bottom: 10px;}
-   .paymentsuccess p{line-height: 25px; font-size:  18px; text-align: left;}
+  .paymentsuccess p{line-height: 25px; font-size:  18px; text-align: left;}
  </style>
  <div class="main">
     <div class="content">
@@ -35,19 +35,23 @@
               }
             }
         ?>
-        <p style="color: red;">Total Payable Amount(Including Vat): $
+        <p style="color: #16cd00;">Total Payable Amount (Including Vat):
           <?php 
-            //$vat= Session::get('sum')*0.1;
             $grandTotal=Session::get('sum');
-            echo $grandTotal;
+            echo "৳".$grandTotal;
           ?>
               
         </p>
-        <p>Thanks for Purchase. Receive your order Successfully. We will contact you ASAP with delivery details. Here is your order details...<a href='orderdetails.php'>Visit Here...</a></p>
- 			</div>
+        <p>You order has placed successfully. Thank You for your order. We will contact you HB SHOP with delivery details. Here is your order details...<a href='orderdetails.php' class="text-decoration-none">Visit Here</a></p>
+        <div ><button class="btn btn-success" name="register"> <a href="../shop/" style="text-decoration: none;color:#ffffff;">Got to Home</a></button></div>
+      </div>
+       
+			    
  		</div>
  	</div>
 </div>
+
+
  
  <?php 
  	include 'inc/footer.php';

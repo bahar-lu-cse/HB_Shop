@@ -32,7 +32,7 @@
 				 <a href="preview-3.html"><img src="admin/<?php echo $result['image'];?>" alt="" /></a>
 				 <h2><?php echo $result['productName'];?></h2>
 				 <p><?php echo $fm->textShorten($result['body'], $limit = 80);?></p>
-				 <p><span class="price">$<?php echo $result['price'];?></span></p>
+				 <p><span class="price">৳<?php echo $result['price'];?></span></p>
 			     <div class="button"><span><a href="details.php?pdodID=<?php echo $result['productID']?>">Details</a></span></div>
 			</div>	 
 		<?php }}else{ ?>

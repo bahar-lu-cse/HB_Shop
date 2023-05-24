@@ -7,7 +7,7 @@
  	.content h2 span{display: block; color: red; font-size: 170px;}
 
  </style>
- <!--<script>window.location='http://localhost/11.ecommerce_website/shop';</script>-->
+
 </head>
 <body>
 	<div class="content">

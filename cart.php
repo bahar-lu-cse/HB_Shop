@@ -21,7 +21,7 @@
 ?>
 <?php
 	if(!isset($_GET['refid'])){
-		echo "<meta http-equiv='refresh' content='0;URL=?refid=foyez'/>";
+		echo "<meta http-equiv='refresh' content='0;URL=?refid=bahar'/>";
 	}
 ?>
  <div class="main">
@@ -37,9 +37,9 @@
 					}
 				?>
 	    	    <style>
-						table.tblone tr th,table.tblone tr td {border-right: 1px solid #e4d3e66b;}
+					table.tblone tr th,table.tblone tr td {border-right: 1px solid #e4d3e66b;}
 				</style>
-				<table class="tblone">
+				<table class="tblone Large shadow" style="border-bottom: 1px solid #ebebeb;">
 					<tr>
 						<th width="5%">SL</th>
 						<th width="25%">Product Name</th>
@@ -58,81 +58,84 @@
 							$qty=0;
 							while($result=$cartProd->fetch_assoc()){
 								$i++;
-					?>
-					<tr>
-						<td ><?php echo $i;?></td>
-						<td ><?php echo $result['productName'];?></td>
-						<td ><img src="<?php echo "admin/".$result['image'];?>" alt=""/></td>
-						<td>$<?php echo $result['price'];?></td>
-						<td>
-				<form action="" method="post">
-					<input type="hidden" name="cartID" value="<?php echo $result['cartID'];?>"/>
-					<input type="number" name="quantity" value="<?php echo $result['quantity'];?>"/>
-					<input type="submit" name="submit" value="Update"/>
-				</form>
-						</td>
-						<td>$<?php 
-							$total=$result['price']*$result['quantity'];
-							echo $total;
-							?>
-							</td>
-						<td><a onclick="return confirm('Are You Sure To DElete!');" href="?delprod=<?php
-						 echo $result['cartID']; ?>">X</a></td>
-					</tr>
-					<?php 
-						$sum=$sum+$total;
-						$qty=$qty+ $result['quantity'];
-						Session::set("sum", $sum);
-						Session::set("items",$qty);
+								?>
+								<tr>
+									<td ><?php echo $i;?></td>
+									<td ><?php echo $result['productName'];?></td>
+									<td ><img src="<?php echo "admin/".$result['image'];?>" alt=""/></td>
+									<td>৳<?php echo $result['price'];?></td>
+									<td>
+										<form action="" method="post">
+											<input type="hidden" name="cartID" value="<?php echo $result['cartID'];?>"/>
+											<input type="number" name="quantity" value="<?php echo $result['quantity'];?>"/>
+											<input type="submit" name="submit" value="Update"/>
+										</form>
+									</td>
+									<td>৳<?php 
+										$total=$result['price']*$result['quantity'];
+										echo $total;
+										?>
+									</td>
+									<td >
+										<a onclick="return confirm('Are You Sure To DElete!');" class="btn btn-danger btn-sm" href="?delprod=<?php echo $result['cartID']; ?>">
+											Remove
+										</a>
+									</td>
+								</tr>
 
-					?>
-				<?php } } ?> 
+								<?php 
+									$sum=$sum+$total;
+									$qty=$qty+ $result['quantity'];
+									Session::set("sum", $sum);
+									Session::set("items",$qty);
+								?>
+					    <?php } 
+					} ?> 
 				</table>
+
 				<?php
 					$getdata=$ct->checkCartTable();
-						if($getdata){ ?>
-			   	<table style="float:right;text-align:left;" width="40%">
-					<tr>
-						<th>Sub Total : </th>
-						<td>$<?php echo $sum; ?></td>
-					</tr>
-					<tr>
-						<th>VAT : </th>
-						<td>$<?php 
-						$vat= ($sum/100)*10;
-						echo $vat; 
-						?> (10%)</td>
-					</tr>
-					<tr>
-						<th>Grand Total :</th>
-						<td>$ <?php echo $sum+$vat;?> </td>
-					</tr>
-			   </table>
+					if($getdata){ 
+				?>
+				<div class="row" style="margin-left: 340px; margin-top: 40px;">
+					<div class="col-sm-8">
+						<div class="card border border-success p-4">
+							<div class="card-body p-0">
+								<h5>Cart Summary</h5>
+								<ul class="list-group list-group-sm mt-3">
+									<li class="list-group-item d-flex font-weight-bold rounded-bottom">
+										Sub Total <span style="margin-left: 45px;">৳</span><span class="ml-auto"><?php echo $sum; ?> </span> 
+									</li>
+									<li class="list-group-item d-flex font-weight-bold rounded-bottom">
+										VAT <span style="margin-left: 85px;">৳</span><span class="ml-auto"><?php 
+										$vat= ($sum/100)*10;
+										echo $vat; 
+										?> (10%)</span> 
+									</li>
+									<li class="list-group-item d-flex font-weight-bold rounded-bottom">
+										Grand Total <span style="margin-left: 30px;">৳</span><span class="ml-auto"><?php echo $sum+$vat;?> </span>
+										<?php 
+											$_SESSION['total']= $sum+$vat;
+																?> 
+									</li>
+								</ul>
+								<a href="payment.php" class="btn btn-success mt-2">
+									Proceed to Checkout <i class="far fa-arrow-alt-circle-right" style="color: white"></i>
+								</a>
+							</div>
+						</div>
+					</div>
+				</div>
 			</div>
-			<div class="shopping">
-				<div class="shopleft">
-					<a href="index.php"> <img src="images/shop.png" alt="" /></a>
-				</div>
-				<div class="shopright">
-					<a href="payment.php"> <img src="images/check.png" alt="" /></a>
-				</div>
-			</div>
-			<?php } else{
-				header('location: index.php'); 
-				//echo "Cart Is Empty!";?>
-				<div class="shopright">
-					<a href="index.php"> <img src="images/shop.png" alt="" /></a>
-				</div>
+			<?php } else{?>
+				<script type="text/javascript">
+					window.location.href = "index.php"
+				</script>
 			<?php }?>
     	</div>  	
         <div class="clear"></div>
     </div>
  </div>
- <?php 
-    //$vat= Session::get('sum')*0.1;
-    $grandTotal=Session::get('sum');
-    echo $grandTotal;
- ?>
  <?php 
  	include 'inc/footer.php';
  ?>

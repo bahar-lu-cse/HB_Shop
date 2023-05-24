@@ -43,13 +43,11 @@
 				<div class="col span_1_of_3">
       			<div class="company_address">
 				     	<h2>Company Information :</h2>
-						    	<p>500 Lorem Ipsum Dolor Sit,</p>
-						   		<p>22-56-2-9 Sit Amet, Lorem,</p>
-						   		<p>USA</p>
-				   		<p>Phone:(00) 222 666 444</p>
-				   		<p>Fax: (000) 000 00 00 0</p>
-				 	 	<p>Email: <span>info@mycompany.com</span></p>
-				   		<p>Follow on: <span>Facebook</span>, <span>Twitter</span></p>
+						<p>Sylhet, Bangladesh</p>
+						<p>Phone: +880 1745 882557</p>
+				   		<p>Phone: +880 1789 145217</p>				   		
+				 	 	<p>Email: <span style="text-decoration: none;">cse_1812020031@lus.ac.bd</span></p>
+				   		 
 				   </div>
 				 </div>
 			  </div>    	

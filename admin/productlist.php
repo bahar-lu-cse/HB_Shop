@@ -57,8 +57,8 @@
 					<td><?php echo $result['catName'];?></td>
 					<td><?php echo $result['brandName'];?></td>
 					<td><?php echo$fm->textShorten($result['body'], 40);?></td>
-					<td>$<?php echo $result['price'];?></td>
-					<td ><img style="height: 45px; width: 40px; padding-left:15px;" src="<?php echo $result['image'];?>"/></td>
+					<td>৳<?php echo $result['price'];?></td>
+					<td ><img style="height: 30px; width: 40px; padding-left:10px;" src="<?php echo $result['image'];?>"/></td>
 					<td>
 						<?php  
 						 if($result['type']==0){
@@ -69,9 +69,9 @@
 						 ?>
 							
 					</td>
-					<td>
-						<a href="editproduct.php?editid=<?php echo $result['productID'];?>">Edit</a> || 
-						<a onclick="return confirm('Are you sure?')" href="?delid=<?php echo $result['productID'];?>">Delete</a>
+					<td style="padding-bottom: 7px;">
+						<a href="editproduct.php?editid=<?php echo $result['productID'];?>" class="btn btn-primary" style="background-color: green">Edit</a>
+						<a onclick="return confirm('Are you sure?')" href="?delid=<?php echo $result['productID'];?>" class="btn btn-success">Delete</a>
 					</td>
 				</tr>
 			<?php } }?>

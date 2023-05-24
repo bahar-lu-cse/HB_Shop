@@ -84,7 +84,7 @@
 							<td><?php echo$result['productName']; ?></td>
 							<td><?php echo $result['quantity']; ?></td>
 							<td><?php echo $result['customerID']; ?></td>
-							<td>$<?php echo $result['price']?></td>
+							<td> <!--৳--> <?php echo $result['price']?></td>
 							<td><a href="customer.php?customerID=<?php echo $result['customerID']?>">View Details</a></td>
 							<td>
 						<style>

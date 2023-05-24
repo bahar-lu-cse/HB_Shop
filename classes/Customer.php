@@ -11,6 +11,7 @@
 			$this->db=new Database();
 			$this->fm=new Format();
 		}
+
 		public function customerRegistration($data){
 			$name =$this->fm->validation($data['name']);
 			$name= mysqli_real_escape_string($this->db->link, $data['name']); 
@@ -26,23 +27,36 @@
 	        $country= mysqli_real_escape_string($this->db->link, $data['country']); 
 	        $phone=$this->fm->validation($data['phone']);
 	        $phone= mysqli_real_escape_string($this->db->link, $data['phone']); 
-	        $password=$this->fm->validation($data['password']);
-	        $password= mysqli_real_escape_string($this->db->link, md5($data['password'])); 
-	        if($name=="" || $city=="" ||$zip=="" || $email=="" || $address=="" || $country=="" || $phone=="" || $password==""){
+			$token=md5(rand());
+			
+
+	        if($name=="" || $city=="" || $zip=="" || $email=="" || $address=="" || $country=="" || $phone=="" || $data['password']==""){
 				$msg= "<span class='error'>Please fill all the fields!</span>";
 				return $msg;
 			}
+			$password=$this->fm->validation($data['password']);
+	        $password= mysqli_real_escape_string($this->db->link, md5($data['password'])); 
+
 			$mailquery="SELECT * from tbl_customer WHERE email='$email' LIMIT 1";
 			$mailCheck=$this->db->select($mailquery);
 			if($mailCheck){
 				$msg= "<span class='error'>Email Address Alreay Exist!</span>";
 				return $msg;
 			}else{
-				$query="INSERT into tbl_customer(name, address,	city, country, zip, phone, email, password) 
-						values('$name', '$address','$city','$country',$zip,'$phone','$email','$password')";
+				$query="INSERT into tbl_customer(name, address,	city, country, zip, phone, email, password, token, status) 
+						values('$name', '$address','$city','$country',$zip,'$phone','$email','$password','$token','0')";
 				$customerReg=$this->db->insert($query);
 				if($customerReg){
-					return "<span class='success'>Registration Successfully.</span>";
+					$to= $email;
+					$sub ="Email Verification";
+					$message= "<a href='http://localhost/shop/verify.php?token=$token'>Verify Account</a>";
+					
+					$headers= "From: baharlucse@gmail.com";
+					$headers .= "MIME-Version:Bahar-Shop" . "\r\n";
+					$headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
+
+					mail($to,$sub,$message,$headers);
+					return "<span class='success'>Registration Successfully. <b>Please Check Your Email to Verify.</b></span>";
 				}
 				else {
 					return "<span class='error'>Can not register your Account!</span>";
@@ -62,11 +76,21 @@
 			$query="SELECT * from tbl_customer WHERE email='$email' && password='$password' LIMIT 1";
 			$check=$this->db->select($query);
 			if($check){
-				$value=$check->fetch_assoc();
-				Session::set("cuslogin", true);
-				Session::set("cusID", $value['customerID']);
-				Session::set("cusName", $value['name']);
-				header('Location: cart.php');
+				$Vquery="SELECT * from tbl_customer WHERE email='$email' && password='$password' && status='1' LIMIT 1";
+				$Vcheck=$this->db->select($Vquery);
+				if(!$Vcheck){
+					$msg= "<span class='error'>Please Verify Your Email.</span>";
+					return $msg;
+				}else{
+					$value=$check->fetch_assoc();
+					Session::set("cuslogin", true);
+					Session::set("cusID", $value['customerID']);
+					Session::set("cusName", $value['name']);
+					Session::set("cusEmail", $value['email']);
+
+
+					header('Location: index.php');
+				}
 			}else{
 				$msg= "<span class='error'>Email or Password Not Matched!</span>";
 				return $msg;
@@ -116,6 +140,25 @@
 					return $msg;
 				}
 			}
+		}
+		public function verify($token){
+			$query="SELECT * from tbl_customer WHERE token='$token' && status= '0' LIMIT 1";
+			$user=$this->db->select($query);
+			if($user){
+				$updateQuery="UPDATE tbl_customer 
+					SET 
+					status= '1'
+					WHERE token='$token'";
+				$verify=$this->db->update($updateQuery);
+				if($verify){
+					echo "<span class='success'>Your account has been verified successfully</span>";
+				}else{
+					echo "<span class='success'>Sorry! We could not verify your account.</span>";
+				} 
+			}else{
+				echo "This account is invalid or already verified";
+			}
+	
 		}
 	}
 ?>

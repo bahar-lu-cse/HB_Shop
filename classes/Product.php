@@ -14,7 +14,7 @@
 		}
 		public function productInsert($data, $file){
 			$productName =$this->fm->validation($data['productName']);
-			$productName= mysqli_real_escape_string($this->db->link, $data['productName']); 
+			$productName= mysqli_real_escape_string($this->db->link, $data['productName']);
 	        $catId=$this->fm->validation($data['catId']);
 	        $catId= mysqli_real_escape_string($this->db->link, $data['catId']); 
 	        $brandID=$this->fm->validation($data['brandID']);
@@ -32,7 +32,7 @@
 			$file_tmp= $file['image']['tmp_name'];
 
 			$div=explode(".", $file_name);
-			$file_ext=strtolower(end($div)); //jpg
+			$file_ext=strtolower(end($div)); //jpg.png
 			$unique_name=substr(md5(time()), 0, 10).'.'.$file_ext;
 			$upload_image="upload/".$unique_name; //uploads/unique_name
 			
@@ -64,16 +64,7 @@
 			From tbl_product as p, tbl_catagory as c, tbl_brands as b
 			Where p.catId=c.catId AND p.brandID=b.brandID
 			order by p.productID DESC";
-			/*
-			$query="select tbl_product.*,tbl_catagory.catName, tbl_brands.brandName
-			from tbl_product
-			INNER JOIN tbl_catagory
-			ON tbl_product.catId=tbl_catagory.catId
-			INNER JOIN tbl_brands
-			ON tbl_product.brandID=tbl_brands.brandID
-			order by tbl_product.productID ASC";
-			$result=$this->db->select($query);
-				*/
+			
 			$result=$this->db->select($query);
 			return $result;
 		}
@@ -92,14 +83,14 @@
 	        $type        = mysqli_real_escape_string($this->db->link, $data['type']); 
 
 	        $permitted=array("jpg","png","gif","jpeg");
-			$file_name=$file['image']['name']; //foyez.JPG
+			$file_name=$file['image']['name']; 
 			$file_size=$file['image']['size'];
 			$file_tmp= $file['image']['tmp_name'];
 
 			$div=explode(".", $file_name);
-			$file_ext=strtolower(end($div)); //jpg
+			$file_ext=strtolower(end($div));
 			$unique_name=substr(md5(time()), 0, 10).'.'.$file_ext;
-			$upload_image="upload/".$unique_name; //uploads/unique_name
+			$upload_image="upload/".$unique_name; 
 			
 			if($productName=="" || $catId=="" ||$brandID=="" || $body=="" || $price=="" || $type==""){
 				$msg= "<span class='error'>Please fill all the fields!</span>";
@@ -174,17 +165,18 @@
 			if($delProduct){
 				return $msg="<span class='success'>Product deleted Successfully</span>";
 			}else{
-				//return "<span class='error'>Catagory not Deleted</span>";
+			
 				return $msg="<span class='error'>Product not Deleted</span>";
 			}
 		}
 		public function getFeaturedProduct(){
-			$query="select * from tbl_product WHERE type='0' order by productID ASC LIMIT 4";
+			$query="select * from tbl_product WHERE type='0' order by productID DESC LIMIT 8";
 			$getFP=$this->db->select($query);
 			return $getFP;
 		}
+	
 		public function getNewProduct(){
-			$query="select * from tbl_product order by productID DESC LIMIT 4";
+			$query="select * from tbl_product order by productID DESC LIMIT 8";
 			$getFP=$this->db->select($query);
 			return $getFP;
 		}
@@ -196,6 +188,7 @@
 			$result=$this->db->select($query);
 			return $result;
 		}
+
 		public function latestFromIphone(){
 			$query="select * from tbl_product where brandID='1' order by productID DESC LIMIT 1";
 			$getIphone=$this->db->select($query);
@@ -216,6 +209,23 @@
 			$getCanon=$this->db->select($query);
 			return $getCanon;
 		}
+
+		public function getAcerProduct(){
+			$query="select * from tbl_product WHERE brandID='3' order by productID DESC LIMIT 20";
+			$getFP=$this->db->select($query);
+			return $getFP;
+		}
+		public function getSamsungProduct(){
+			$query="select * from tbl_product WHERE brandID='2' order by productID DESC LIMIT 20";
+			$getFP=$this->db->select($query);
+			return $getFP;
+		}
+		public function getCanonProduct(){
+			$query="select * from tbl_product WHERE brandID='4' order by productID DESC LIMIT 20";
+			$getFP=$this->db->select($query);
+			return $getFP;
+		}
+
 		public function getProdByCat($catID){
 			$query="select * from tbl_product where catId='$catID'";
 			$getCategoryProduct=$this->db->select($query);
@@ -229,11 +239,7 @@
 			$checkCompare=$this->db->select($checkCompareProd);
 			if($checkCompare){
 				return $msg="<span class='error'>Product Already Added to Compare!</span>";
-				/*while($result=$checkCart->fetch_assoc()){
-					$qty=$result['quantity']+$quantity;
-					$cartID=$result['cartID'];
-					$update=$this->updateQuantity($qty,$cartID);
-				}*/
+				
 		    }else{
 				$query="SELECT * from tbl_product where productID='$ProductID'";
 				$result=$this->db->select($query)->fetch_assoc();

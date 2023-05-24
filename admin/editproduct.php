@@ -99,7 +99,7 @@
                         <label>Description</label>
                     </td>
                     <td>
-                        <textarea class="tinymce" name='body'><?php echo $value['body']?></textarea>
+                        <textarea rows="10" cols="60" class="" name='body'><?php echo $value['body']?></textarea>
                     </td>
                 </tr>
 				<tr>
@@ -163,7 +163,7 @@
         </div>
     </div>
 </div>
-<!-- Load TinyMCE -->
+
 <script src="js/tiny-mce/jquery.tinymce.js" type="text/javascript"></script>
 <script type="text/javascript">
     $(document).ready(function () {
@@ -173,7 +173,7 @@
         $('input[type="radio"]').fancybutton();
     });
 </script>
-<!-- Load TinyMCE -->
+
 <?php include 'inc/footer.php';?>
 
 

@@ -25,7 +25,7 @@
 						<tr>
 							<th>Serial No.</th>
 							<th>Category Name</th>
-							<th>Action</th>
+							<th width="14%">Action</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -40,8 +40,8 @@
 							<td><?php echo $i;?></td>
 							<td><?php echo $result['brandName'];?></td>
 							<td>
-								<a href="brandedit.php?brandid=<?php echo $result['brandID'];?>">Edit</a> || 
-								<a onclick="return confirm('Are you sure to confirm?')" href="?brandId=<?php echo $result['brandID'];?>">Delete</a>
+								<a class="btn" style="background-color: green" href="brandedit.php?brandid=<?php echo $result['brandID'];?>">Edit</a>
+								<a class="btn" onclick="return confirm('Are you sure to confirm?')" href="?brandId=<?php echo $result['brandID'];?>">Delete</a>
 							</td>
 						</tr>
 					<?php } }

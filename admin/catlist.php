@@ -25,7 +25,7 @@
 						<tr>
 							<th>Serial No.</th>
 							<th>Category Name</th>
-							<th>Action</th>
+							<th width="14%">Action</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -40,8 +40,8 @@
 							<td><?php echo $i;?></td>
 							<td><?php echo $result['catName'];?></td>
 							<td>
-								<a href="catedit.php?catid=<?php echo $result['catId'];?>">Edit</a> || 
-								<a onclick="return confirm('Are you sure to confirm?')" href="?catId=<?php echo $result['catId'];?>">Delete</a>
+								<a href="catedit.php?catid=<?php echo $result['catId'];?>" class="btn" style="background-color: green">Edit</a>
+								<a onclick="return confirm('Are you sure to confirm?')" href="?catId=<?php echo $result['catId'];?>" class="btn">Delete</a>
 							</td>
 						</tr>
 					<?php } }
